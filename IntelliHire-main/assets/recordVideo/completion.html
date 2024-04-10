@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Completed</title>
+</head>
+
+<body>
+    <h1>Interview Completed</h1>
+    <p>Thank you for participating!</p>
+    <p>Your results will be out after some time.</p>
+
+    <h1>Interview Dashboard</h1>
+    <table id="resultTable">
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Desired Answer</th>
+                <th>Actual Answer</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table body will be populated dynamically -->
+        </tbody>
+</body>
+
+
+<script>
+const savedAnswers = JSON.parse(localStorage.getItem('savedAnswers'));
+console.log(savedAnswers)
+        
+
+const tableBody = document.querySelector("#resultTable tbody");
+savedAnswers.forEach(item => {
+    const row = tableBody.insertRow();
+    row.insertCell(0).textContent = item.Question;
+    row.insertCell(1).textContent = item.Desired_Answer;
+    row.insertCell(2).textContent = item.Answer;
+    row.insertCell(3).textContent = item.score; // Leave score column empty initially
+});
+
+</script>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview</title>
+    <link rel="stylesheet" href="interview.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
+</head>
+
+<body>
+    <h1 id="questionTitle"></h1>
+    <p id="questionText"></p>
+    <div id="container">
+        <div class="video-container">
+            <video id="video" autoplay muted></video>
+        </div>
+        <div class="video-container">
+            <video id="webcam" autoplay muted></video>
+        </div>
+    </div>
+    <div id="transcription"></div>
+    <button id="stopButton" style="display: none;">Stop</button>
+    <button id="nextButton" style="display: none;">Next</button>
+
+    <script>
+        const video = document.getElementById("video");
+        const webcam = document.getElementById("webcam");
+        const transcriptionDiv = document.getElementById("transcription");
+        const stopButton = document.getElementById("stopButton");
+        const nextButton = document.getElementById("nextButton");
+        let recognition;
+        let questionIndex = -1;
+        let interviewQuestions=[];
+        let savedAnswers=[];
+        // const interviewQuestions = [
+        //     { question: "Tell me about yourself.", answer: "", videoUrl: "video.mp4" },
+        //     { question: "What are your strengths?", answer: "", videoUrl: "video.mp4" },
+        //     { question: "What are your weaknesses?", answer: "", videoUrl: "video.mp4" }
+        //     // Add more questions as needed
+        // ];
+
+        fetch('http://localhost:3000/fetch-questions')
+            .then(response => response.json())
+            .then(data => {
+                interviewQuestions = data;
+                console.log('Interview questions:', interviewQuestions);
+                nextQuestion(); // Initialize with first question after fetching
+            })
+            .catch(error => console.error('Error fetching interview questions:', error));
+
+       
+
+        stopButton.addEventListener("click", stopInterview);
+        nextButton.addEventListener("click", nextQuestion);
+
+        let interviewTimer; // Timer for stopping interview after 1 minute
+
+        function initializeQuestion() {
+        console.log('Initializing question:', questionIndex); // Debugging
+        transcriptionDiv.textContent = ""; // Clear previous transcription
+        if (questionIndex >= 0 && questionIndex < interviewQuestions.length) {
+            const { question, answer, videoUrl } = interviewQuestions[questionIndex];
+            document.getElementById("questionTitle").textContent = `Interview Question ${questionIndex + 1}`;
+            document.getElementById("questionText").textContent = question;
+            video.src = videoUrl;
+            startInterview(); // Start interview only when a new question is displayed
+            if (questionIndex === interviewQuestions.length - 1) {
+                nextButton.textContent = "Complete"; // Change button text to "Complete" on the last question
+            } else {
+                nextButton.textContent = "Next"; // Change button text back to "Next"
+            }
+
+
+            stopButton.style.display = "inline-block";
+            nextButton.style.display = "inline-block";
+
+            // Read the question aloud
+            speak(question);
+
+
+        } else {
+            nextButton.style.display = "none"; // Hide the "Next" button
+            stopButton.style.display = "none"; // Hide the "Stop" button
+            
+            //const dashboardData = encodeURIComponent(JSON.stringify(savedAnswers));
+            
+            setTimeout(() => {
+                window.location.href = "completion.html";
+            }, 1); // Redirect after 3 seconds
+            saveAnswers();
+        }
+    }
+
+        function nextQuestion() {
+            questionIndex++;
+            initializeQuestion();
+        }
+
+        function startInterview() {
+
+            clearInterval(interviewTimer);
+            // Start timer for stopping interview after 1 minute
+            interviewTimer = setTimeout(stopInterview, 30000); // 1 minute = 60000 milliseconds
+
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                .then(function (stream) {
+                    webcam.srcObject = stream;
+
+                    recognition = new window.webkitSpeechRecognition();
+                    recognition.continuous = true;
+                    recognition.interimResults = false; // Only final results
+                    recognition.lang = 'en-US'; // Set language
+
+                    recognition.onresult = function (event) {
+                        const transcript = event.results[event.results.length - 1][0].transcript;
+                        transcriptionDiv.textContent += transcript + ' ';
+                        interviewQuestions[questionIndex].answer = transcript; // Store the answer
+
+                    savedAnswers.push({
+                    Question: interviewQuestions[questionIndex].question,
+                    Desired_Answer: interviewQuestions[questionIndex].desired_answer,
+                    Answer: transcript,
+                    
+                });
+
+
+                
+                // Save the answers after each question is answered
+               // saveAnswers();
+
+                    };
+
+                    recognition.onerror = function (event) {
+                        console.error('Speech recognition error:', event.error);
+                    };
+
+                    recognition.onend = function () {
+                        console.log('Speech recognition stopped.');
+                        
+                    };
+
+                    recognition.start();
+                    
+                })
+                .catch(function (error) {
+                    console.error("Error accessing the webcam:", error);
+                });
+        }
+
+        async function evaluateAnswer(index) {
+    try {
+        const answers = savedAnswers.map(({ Answer, Desired_Answer }) => ({ answer: Answer, desired_answer: Desired_Answer }));
+        const response = await fetch("http://localhost:4000/api/get_similarity_scores", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ answers })
+        });
+
+        if (response.ok) {
+            const scores = await response.json();
+            for (let i = 0; i < scores.length; i++) {
+                savedAnswers[i].score = scores[i];
+            }
+            
+            saveAnswers();
+            
+            
+           
+        } else {
+            console.error("Failed to evaluate answer:", response.statusText);
+        }
+    } catch (error) {
+        console.error("Error evaluating answer:", error);
+    }
+}
+
+
+
+
+        function stopInterview() {
+            clearInterval(interviewTimer);
+            if (recognition) {
+                recognition.stop();
+            }
+            if (webcam.srcObject) {
+                webcam.srcObject.getTracks().forEach(track => track.stop());
+            }
+        
+            //saveAnswers();
+        }
+
+        // function speak(text) {
+        //     const utterance = new SpeechSynthesisUtterance(text);
+        //     speechSynthesis.speak(utterance);
+        // } (Male)
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voices = speechSynthesis.getVoices();
+            const femaleVoice = voices.find(voice => voice.name === 'Google UK English Female');
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
+            }
+            speechSynthesis.speak(utterance);
+            }
+
+        function saveAnswers() {
+            evaluateAnswer();
+            localStorage.setItem('savedAnswers', JSON.stringify(savedAnswers));
+            // Check if all questions have been answered
+            const allQuestionsAnswered = interviewQuestions.every(question => question.answer !== undefined);
+
+            // If all questions have been answered, proceed to save the answers
+            if (allQuestionsAnswered) {
+                
+                const ws = XLSX.utils.json_to_sheet(savedAnswers);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Interview Answers');
+
+                // Save the file
+                XLSX.writeFile(wb, 'interview_answers.xlsx');
+            }
+        }
+
+
+
+
+
+
+        
+    </script>
+</body>
+
+</html>

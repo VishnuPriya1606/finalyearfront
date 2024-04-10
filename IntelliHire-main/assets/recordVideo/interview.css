@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500;700&display=swap');
+        
+        body, html {
+            background-color: #FCECDC; /* Match background color of index.html */
+            font-family: 'Josefin Sans', sans-serif; /* Match font-family */
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+        }
+
+        .page-container {
+            max-width: 800px; /* Set maximum width for the page */
+            margin: 0 auto; /* Center the page horizontally */
+            border-top: 5px solid #181A24; /* Top border color */
+            border-left: 5px solid #181A24; /* Left border color */
+            border-right: 5px solid #181A24; /* Right border color */
+            padding-top: 20px; /* Add padding on top */
+        }
+        
+        #questionTitle {
+            text-align: center;
+            color: #000;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 30px;
+            margin-right: 70px;
+            margin-left: 70px;
+
+        }
+
+        #questionText {
+            margin-top: 30px;
+            margin-bottom: 50px;
+            text-align: center;
+            color: #000;
+            font-size: 1.5em;
+            padding: 20px; /* Add padding */
+            border-radius: 20px; /* Rounded corners */
+            background-color: #F7F5E9;
+            max-width: 80%; /* Limit width */
+            margin: 0 auto; /* Center horizontally */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow */
+        }
+
+        .video-container {
+            flex: 1;
+            margin-right: 25px;
+            margin-left: 50px;
+            max-width: 50%;
+            border-radius: 20px; /* Rounded corners */
+            overflow: hidden;
+            height: 359px;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+        }
+
+        #webcam{
+            height: 450px;
+            
+        }
+
+        #transcription
+        {
+            margin-top: 500px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #F7F5E9; /* Match background color of index.html */
+            color: #000; /* Black color for text */
+            outline: none;
+            max-width: 80%; /* Limit width */
+            margin: 0 auto; /* Center horizontally */
+        }
+
+        #transcription{
+            margin-top: 30px;
+            height: 50px;
+            margin-bottom: 30px;
+        }
+
+        #stopButton {
+            background-color: #F7F5E9; /* Red color for stop button */
+            margin-right: 50px; /* Add margin between buttons */
+            margin-left: 500px;
+           
+
+        }
+
+        #nextButton {
+            background-color: #F7F5E9; /* Blue color for next button */
+            margin-left: 50px;
+           
+        }
+
+        #stopButton,
+        #nextButton {
+            
+           margin-bottom: 20px;
+            border: 1px solid black;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            width: 15%;
+            border-radius: 5px;
+            cursor: pointer;
+           
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+            
+        }
+
+        #stopButton:hover,
+        #nextButton:hover {
+            background-color: #CCCCCC; /* Lighter color on hover */
+        }
+
+        @media only screen and (max-width: 626px) {
+            .video-container {
+                max-width: 100%; /* Adjust max-width for smaller screens */
+            }
+        }
+ 

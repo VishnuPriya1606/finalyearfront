@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Rules</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    
+        <section id="terms-of-service">
+            <div class="card">
+                <h1 class="primary-heading">Interview Rules</h1>
+                <p class="paragraph">
+                    
+            1. Start Button: Begin the interview by clicking on the start button.<br><br>
+            2. Time Limit: Each question has a maximum answering time of 30 seconds. If the time exceeds, move to the next question.<br><br>
+            3. Webcam On: Keep your webcam turned on throughout the interview session.<br><br>
+            4. AI Avatar: An AI avatar will ask each question one by one.<br><br>
+            5. Answer Order: Answer questions in the same order they are presented.<br><br>
+            6. Next Button: Click on the next button to move to the next question after providing your answer.<br><br>
+            7. No Interruptions: Avoid interruptions or distractions during the interview.<br><br>
+            8. Honesty: Provide honest and concise answers to each question.<br><br>
+            9. Feedback: Once all questions are answered, provide feedback if prompted.<br><br>
+            10. Professionalism: Maintain a professional demeanor throughout the interview process.<br><br>
+        
+                </p>
+                <label for="agreeRules" class="agreeRules">
+                    <input type="checkbox" id="agreeRules">
+                    <span class="checkmark"></span>
+                    I agree to the interview rules
+                </label><br>
+                <button id="startButton" class="disabled">Start</button>
+            
+            </div>
+        </section>
+        <footer>
+            <p class="footer-heading">© Copyright Intellihire. All rights reserved.</p>
+        </footer>
+   
+    
+
+    <script>
+        document.getElementById("agreeRules").addEventListener("change", function () {
+            var startButton = document.getElementById("startButton");
+
+    if (this.checked) {
+        startButton.disabled = false;
+        startButton.classList.remove("disabled");
+        startButton.classList.add("enabled");
+    } else {
+        startButton.disabled = true;
+        startButton.classList.remove("enabled");
+        startButton.classList.add("disabled");
+    }
+        });
+
+        document.getElementById("startButton").addEventListener("click", function () {
+            window.location.href = "interview.html";
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+  <div class="container" id="container">
+    <div class="row">
+      <div class="col align-items-center flex-col sign-in">
+				<div class="form-wrapper align-items-center">
+					<div class="form sign-in">
+
+
+      <form id="login-form">
+        <div class="input-group">
+          <i class='bx bxs-user'></i>
+        <input type="text" id="username" placeholder="Username" required>
+        </div>
+        <div class="input-group">
+          <i class='bx bxs-lock-alt'></i>
+        <input type="password" id="password" placeholder="Password" required>
+        </div>
+        <button type="submit">Sign In</button>
+      </form>
+      <p id="message"></p>
+      <!-- <p id="signup-link">New User? <a href="signup.html">Signup here</a></p> -->
+      <p>
+        <b>
+          Forgot password?
+        </b>
+      </p>
+      <p>
+        <span>
+          Don't have an account?
+        </span>
+        <b onclick="toggle()" class="pointer">
+          Sign up here
+        </b>
+      </p>
+
+    </div>
+    
+</div>
+</div>
+</div>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await axios.post('http://localhost:6000/login', { username, password });
+        document.getElementById('message').textContent = response.data.message;
+        window.location.href = "dashboard.html"; // Redirect to dashboard on successful login
+      } catch (error) {
+        console.error(error);
+        document.getElementById('message').textContent = error.response.data.message;
+      }
+    });
+  </script>
+  <script src="example.js"></script>
+
+</body>
+</html>
+
+
+

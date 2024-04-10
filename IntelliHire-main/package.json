@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@clerk/clerk-js": "^4.70.3",
+    "xlsx": "^0.18.5"
+  }
+}
