@@ -30,16 +30,17 @@
 
 <script>
 const savedAnswers = JSON.parse(localStorage.getItem('savedAnswers'));
+const scores = JSON.parse(localStorage.getItem('scores'));
 console.log(savedAnswers)
         
 
 const tableBody = document.querySelector("#resultTable tbody");
-savedAnswers.forEach(item => {
+savedAnswers.forEach((item ,index) => {
     const row = tableBody.insertRow();
     row.insertCell(0).textContent = item.Question;
     row.insertCell(1).textContent = item.Desired_Answer;
     row.insertCell(2).textContent = item.Answer;
-    row.insertCell(3).textContent = item.score; // Leave score column empty initially
+    row.insertCell(3).textContent = scores[index]; // Leave score column empty initially
 });
 
 </script>

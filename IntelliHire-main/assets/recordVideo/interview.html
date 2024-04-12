@@ -35,6 +35,7 @@
         let questionIndex = -1;
         let interviewQuestions=[];
         let savedAnswers=[];
+        let answerScores = [];
         // const interviewQuestions = [
         //     { question: "Tell me about yourself.", answer: "", videoUrl: "video.mp4" },
         //     { question: "What are your strengths?", answer: "", videoUrl: "video.mp4" },
@@ -86,10 +87,10 @@
             stopButton.style.display = "none"; // Hide the "Stop" button
             
             //const dashboardData = encodeURIComponent(JSON.stringify(savedAnswers));
-            
+          
             setTimeout(() => {
-                window.location.href = "completion.html";
-            }, 1); // Redirect after 3 seconds
+               window.location.href = "completion.html";
+           }, 3000); // Redirect after 3 seconds -->
             saveAnswers();
         }
     }
@@ -160,15 +161,12 @@
             },
             body: JSON.stringify({ answers })
         });
-
+        
         if (response.ok) {
             const scores = await response.json();
-            for (let i = 0; i < scores.length; i++) {
-                savedAnswers[i].score = scores[i];
-            }
-            
-            saveAnswers();
-            
+            console.log(scores)
+            console.log("Test")
+            localStorage.setItem('scores',JSON.stringify(scores))
             
            
         } else {
@@ -212,6 +210,7 @@
         function saveAnswers() {
             evaluateAnswer();
             localStorage.setItem('savedAnswers', JSON.stringify(savedAnswers));
+            
             // Check if all questions have been answered
             const allQuestionsAnswered = interviewQuestions.every(question => question.answer !== undefined);
 
