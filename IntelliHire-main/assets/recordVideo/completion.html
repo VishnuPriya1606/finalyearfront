@@ -4,7 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="completion.css">
     <title>Interview Completed</title>
+    <style>
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        .failure {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,23 +37,40 @@
         <tbody>
             <!-- Table body will be populated dynamically -->
         </tbody>
+    </table>
+
+    <p id="selectionMessage"></p>
+
+    <script>
+        const savedAnswers = JSON.parse(localStorage.getItem('savedAnswers'));
+        const scores = JSON.parse(localStorage.getItem('scores'));
+        console.log(savedAnswers)
+
+        const tableBody = document.querySelector("#resultTable tbody");
+        let totalScore = 0;
+        savedAnswers.forEach((item, index) => {
+            const row = tableBody.insertRow();
+            row.insertCell(0).textContent = item.Question;
+            row.insertCell(1).textContent = item.Desired_Answer;
+            row.insertCell(2).textContent = item.Answer;
+            row.insertCell(3).textContent = scores[index]; 
+            totalScore += scores[index];
+        });
+
+        // Calculate the percentage of the maximum possible score
+        const maxPossibleScore = savedAnswers.length; 
+        const percentage = (totalScore / maxPossibleScore) * 100;
+
+        // Display selection message based on the percentage
+        const selectionMessage = document.getElementById("selectionMessage");
+        if (percentage > 60) {
+            selectionMessage.textContent = "Congratulations! You have been Selected.";
+            selectionMessage.classList.add("success");
+        } else {
+            selectionMessage.textContent = "Sorry, You have not been Selected.";
+            selectionMessage.classList.add("failure");
+        }
+    </script>
 </body>
 
-
-<script>
-const savedAnswers = JSON.parse(localStorage.getItem('savedAnswers'));
-const scores = JSON.parse(localStorage.getItem('scores'));
-console.log(savedAnswers)
-        
-
-const tableBody = document.querySelector("#resultTable tbody");
-savedAnswers.forEach((item ,index) => {
-    const row = tableBody.insertRow();
-    row.insertCell(0).textContent = item.Question;
-    row.insertCell(1).textContent = item.Desired_Answer;
-    row.insertCell(2).textContent = item.Answer;
-    row.insertCell(3).textContent = scores[index]; // Leave score column empty initially
-});
-
-</script>
 </html>
