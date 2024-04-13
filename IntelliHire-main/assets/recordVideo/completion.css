@@ -1,0 +1,53 @@
+/* completion.css */
+
+body, html {
+    background-color: #FCECDC; /* Match background color of interview.css */
+    font-family: 'Josefin Sans', sans-serif; /* Match font-family */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+}
+
+h1 {
+    text-align: center;
+    color: #000;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+}
+
+p {
+    text-align: center;
+    color: #000;
+    margin-bottom: 30px;
+    font-size: 1.5em;
+}
+
+table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #F7F5E9;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #000;
+}
+
+/* Apply styles similar to interview.css for smaller screens */
+@media only screen and (max-width: 626px) {
+    h1 {
+        font-size: 2em;
+    }
+    
+    p {
+        font-size: 1.2em;
+    }
+    
+    table {
+        width: 100%;
+    }
+}
