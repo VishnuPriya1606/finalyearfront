@@ -53,7 +53,7 @@
             row.insertCell(0).textContent = item.Question;
             row.insertCell(1).textContent = item.Desired_Answer;
             row.insertCell(2).textContent = item.Answer;
-            row.insertCell(3).textContent = scores[index]; 
+            row.insertCell(3).textContent =Math.round(scores[index] * 100) / 100; 
             totalScore += scores[index];
         });
 
